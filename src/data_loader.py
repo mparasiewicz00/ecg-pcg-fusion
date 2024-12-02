@@ -19,6 +19,8 @@ class DataLoader:
         record = wfdb.rdrecord(self.dat_path.replace('.dat', ''), sampto=sample_rate)
         return record.p_signal[:, 0], record.fs
 
-    def load_pcg_signal(self):
-        pcg_signal, fs_pcg = sf.read(self.wav_path)
+    def load_pcg_signal(self, sample_rate=None, start=0, end=None):
+        pcg_signal, fs_pcg = sf.read(self.wav_path, start=start, stop=end)
+        if sample_rate and len(pcg_signal) > sample_rate:
+            pcg_signal = pcg_signal[:sample_rate]
         return pcg_signal, fs_pcg
