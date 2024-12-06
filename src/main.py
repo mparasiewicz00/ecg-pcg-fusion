@@ -26,6 +26,7 @@ plt.title("Raw ECG Signal")
 plt.xlabel("Samples")
 plt.ylabel("Amplitude")
 plt.legend()
+plt.grid(color='gray', linestyle='--', linewidth=0.5, alpha=0.7)
 plt.show()
 
 # Filtracja sygnału EKG
@@ -37,6 +38,7 @@ plt.title("Filtered ECG Signal")
 plt.xlabel("Samples")
 plt.ylabel("Amplitude")
 plt.legend()
+plt.grid(color='gray', linestyle='--', linewidth=0.5, alpha=0.7)
 plt.show()
 
 # Wyświetlenie surowego sygnału PCG
@@ -46,6 +48,7 @@ plt.title("Raw PCG Signal")
 plt.xlabel("Samples")
 plt.ylabel("Amplitude")
 plt.legend()
+plt.grid(color='gray', linestyle='--', linewidth=0.5, alpha=0.7)
 plt.show()
 
 # Filtracja sygnału PCG
@@ -57,6 +60,7 @@ plt.title("Filtered PCG Signal")
 plt.xlabel("Samples")
 plt.ylabel("Amplitude")
 plt.legend()
+plt.grid(color='gray', linestyle='--', linewidth=0.5, alpha=0.7)
 plt.show()
 
 # Transformacja falkowa EKG
@@ -68,6 +72,7 @@ plt.title("Wavelet Transformed ECG Signal")
 plt.xlabel("Samples")
 plt.ylabel("Amplitude")
 plt.legend()
+plt.grid(color='gray', linestyle='--', linewidth=0.5, alpha=0.7)
 plt.show()
 
 # Detekcja pików R
@@ -83,6 +88,7 @@ plt.title("Wavelet Transformed ECG Signal with Detected R Peaks")
 plt.xlabel("Samples")
 plt.ylabel("Amplitude")
 plt.legend()
+plt.grid(color='gray', linestyle='--', linewidth=0.5, alpha=0.7)
 plt.show()
 
 print(f"Detected R Peaks (samples): {r_peaks}")
@@ -103,6 +109,7 @@ plt.title("Filtered PCG Signal with Detected S1/S2 Peaks")
 plt.xlabel("Samples")
 plt.ylabel("Amplitude")
 plt.legend()
+plt.grid(color='gray', linestyle='--', linewidth=0.5, alpha=0.7)
 plt.show()
 
 print(f"Detected S1/S2 Peaks (samples): {s1_s2_peaks}")

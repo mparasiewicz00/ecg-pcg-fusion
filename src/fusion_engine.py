@@ -55,5 +55,6 @@ class FusionEngine:
         plt.title("Fusion of ECG and PCG Signals (Normalized)")
         plt.xlabel("Time (s)")
         plt.ylabel("Amplitude")
+        plt.grid(color='gray', linestyle='--', linewidth=0.5, alpha=0.7)
         plt.legend()
         plt.show()
