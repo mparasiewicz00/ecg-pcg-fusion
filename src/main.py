@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 from data_loader import DataLoader
 from signal_processor import SignalProcessor
+from src.fusion_engine import FusionEngine
 
 # Ścieżki do plików danych
 hea_path = "../data/a0011.hea"
@@ -51,9 +52,8 @@ plt.show()
 filtered_pcg = pcg_processor.filter_pcg_signal(pcg_signal)
 
 plt.figure(figsize=(12, 4))
-plt.plot(pcg_signal, label="Raw PCG Signal")
-plt.plot(filtered_pcg, label="Filtered PCG Signal", linestyle="--")
-plt.title("Raw vs Filtered PCG Signal")
+plt.plot(filtered_pcg, label="Filtered PCG Signal")
+plt.title("Filtered PCG Signal")
 plt.xlabel("Samples")
 plt.ylabel("Amplitude")
 plt.legend()
@@ -106,3 +106,14 @@ plt.legend()
 plt.show()
 
 print(f"Detected S1/S2 Peaks (samples): {s1_s2_peaks}")
+
+# Inicjalizacja FusionEngine
+fusion_engine = FusionEngine(
+    ecg_signal=filtered_ecg,
+    pcg_signal=filtered_pcg,
+    fs_ecg=fs_ecg,
+    fs_pcg=fs_pcg
+)
+
+# Wizualizacja fuzji sygnałów
+fusion_engine.visualize_fusion()

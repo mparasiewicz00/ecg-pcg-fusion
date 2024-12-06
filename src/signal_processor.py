@@ -10,11 +10,11 @@ class SignalProcessor:
     DEFAULT_ECG_FILTER_LOW = 1  # Dolna częstotliwość filtra dla EKG (Hz)
     DEFAULT_ECG_FILTER_HIGH = 30  # Górna częstotliwość filtra dla EKG (Hz)
     DEFAULT_PCG_FILTER_LOW = 20  # Dolna częstotliwość filtra dla PCG (Hz)
-    DEFAULT_PCG_FILTER_HIGH = 500  # Górna częstotliwość filtra dla PCG (Hz)
+    DEFAULT_PCG_FILTER_HIGH = 400  # Górna częstotliwość filtra dla PCG (Hz)
     DEFAULT_WAVELET = 'db4'  # Domyślna nazwa falki
     DEFAULT_WAVELET_LEVEL = 2  # Domyślny poziom dekompozycji
     GAUSSIAN_SIGMA_ECG = 20  # Parametr sigma dla wygładzania EKG
-    GAUSSIAN_SIGMA_PCG = 5  # Parametr sigma dla wygładzania PCG
+    GAUSSIAN_SIGMA_PCG = 2  # Zmniejszony parametr sigma dla wygładzania PCG
     R_PEAK_THRESHOLD_FACTOR = 1.5  # Współczynnik progu dla wykrywania pików R
     S1_S2_THRESHOLD_FACTOR = 2.0  # Współczynnik progu dla wykrywania tonów S1/S2
     DEFAULT_SEARCH_WINDOW = 0.1  # Okno przeszukiwania wokół pików R (s)
@@ -78,15 +78,16 @@ class SignalProcessor:
 
     def filter_pcg_signal(self, signal):
         """
-        Filtracja sygnału PCG w zakresie 50–300 Hz z wygładzaniem.
+        Filtracja sygnału PCG w zakresie 20–400 Hz z wygładzaniem.
         """
         nyquist = 0.5 * self.sampling_rate
-        low = 50 / nyquist
-        high = 300 / nyquist
+        low = self.DEFAULT_PCG_FILTER_LOW / nyquist
+        high = self.DEFAULT_PCG_FILTER_HIGH / nyquist
 
         sos = butter(4, [low, high], btype='band', output='sos')
         filtered_signal = sosfilt(sos, signal)
 
+        # Zmniejszone wygładzanie
         smoothed_signal = gaussian_filter(filtered_signal, sigma=self.GAUSSIAN_SIGMA_PCG)
         return smoothed_signal
 
@@ -126,13 +127,10 @@ class SignalProcessor:
             if len(local_peaks) == 0:
                 continue
 
-            # Przeskaluj indeksy lokalne do globalnych
             local_peaks_global = [start_idx + idx for idx in local_peaks]
 
-            # Filtrowanie na podstawie dynamicznego progu
             valid_peaks = [idx for idx in local_peaks_global if signal[idx] > dynamic_threshold]
 
-            # Usuwanie peaków zbyt blisko siebie
             filtered_peaks = []
             for peak in valid_peaks:
                 if len(filtered_peaks) == 0 or (peak - filtered_peaks[-1]) > min_distance_samples:
