@@ -48,11 +48,12 @@ plt.legend()
 plt.show()
 
 # Filtracja sygnału PCG
-filtered_pcg = pcg_processor.filter_signal(pcg_signal)
+filtered_pcg = pcg_processor.filter_pcg_signal(pcg_signal)
 
 plt.figure(figsize=(12, 4))
-plt.plot(filtered_pcg, label="Filtered PCG Signal")
-plt.title("Filtered PCG Signal")
+plt.plot(pcg_signal, label="Raw PCG Signal")
+plt.plot(filtered_pcg, label="Filtered PCG Signal", linestyle="--")
+plt.title("Raw vs Filtered PCG Signal")
 plt.xlabel("Samples")
 plt.ylabel("Amplitude")
 plt.legend()
@@ -91,9 +92,7 @@ print(f"R-R Intervals (ms): {rr_intervals}")
 s1_s2_peaks = pcg_processor.detect_s1_s2_peaks(
     signal=filtered_pcg,
     ecg_r_peaks=r_peaks,
-    fs_pcg=fs_pcg,
-    search_window=0.1,  # 100 ms okno synchronizacji
-    dynamic_threshold_factor=2.5
+    fs_pcg=fs_pcg
 )
 
 # Wyświetlenie wyników detekcji na sygnale PCG
