@@ -1,126 +1,110 @@
 import matplotlib.pyplot as plt
 from data_loader import DataLoader
 from signal_processor import SignalProcessor
-from src.fusion_engine import FusionEngine
+from fusion_engine import FusionEngine
 
-# Ścieżki do plików danych
-hea_path = "../data/a0011.hea"
-dat_path = "../data/a0011.dat"
-wav_path = "../data/a0011.wav"
+def main():
+    # Ścieżki do plików
+    hea_path = "../data/a0011.hea"
+    dat_path = "../data/a0011.dat"
+    wav_path = "../data/a0011.wav"
 
-# Inicjalizacja DataLoader
-loader = DataLoader(hea_path, dat_path, wav_path)
+    # Liczba próbek do analizy
+    num_samples = 5000
 
-# Wczytanie sygnału EKG
-ecg_signal, fs_ecg = loader.load_ecg_signal(sample_rate=10000)
-ecg_processor = SignalProcessor(sampling_rate=fs_ecg)
+    # Wczytanie danych
+    loader = DataLoader(hea_path, dat_path, wav_path)
 
-# Wczytanie sygnału PCG
-pcg_signal, fs_pcg = loader.load_pcg_signal(sample_rate=10000)
-pcg_processor = SignalProcessor(sampling_rate=fs_pcg)
+    # Wczytywanie sygnałów
+    ecg_signal, fs_ecg = loader.load_ecg_signal(sample_rate=num_samples)
+    pcg_signal, fs_pcg = loader.load_pcg_signal(sample_rate=num_samples)
 
-# Wyświetlenie surowego sygnału EKG
-plt.figure(figsize=(12, 4))
-plt.plot(ecg_signal, label="Raw ECG Signal")
-plt.title("Raw ECG Signal")
-plt.xlabel("Samples")
-plt.ylabel("Amplitude")
-plt.legend()
-plt.grid(color='gray', linestyle='--', linewidth=0.5, alpha=0.7)
-plt.show()
+    # Przetwarzanie sygnałów
+    ecg_processor = SignalProcessor(fs_ecg)
+    pcg_processor = SignalProcessor(fs_pcg)
 
-# Filtracja sygnału EKG
-filtered_ecg = ecg_processor.filter_signal(ecg_signal)
+    # Filtracja sygnałów
+    filtered_ecg = ecg_processor.filter_signal(ecg_signal, 1, 30)
+    filtered_pcg = pcg_processor.filter_signal(pcg_signal, 20, 400)
 
-plt.figure(figsize=(12, 4))
-plt.plot(filtered_ecg, label="Filtered ECG Signal")
-plt.title("Filtered ECG Signal")
-plt.xlabel("Samples")
-plt.ylabel("Amplitude")
-plt.legend()
-plt.grid(color='gray', linestyle='--', linewidth=0.5, alpha=0.7)
-plt.show()
+    # --- Przefiltrowany sygnał EKG ---
+    plt.figure(figsize=(12, 4))
+    plt.plot(filtered_ecg, label="Filtered ECG Signal")
+    plt.title("Filtered ECG Signal")
+    plt.xlabel("Samples")
+    plt.ylabel("Amplitude")
+    plt.grid(color='gray', linestyle='--', linewidth=0.5, alpha=0.7)
+    plt.legend()
+    plt.show()
 
-# Wyświetlenie surowego sygnału PCG
-plt.figure(figsize=(12, 4))
-plt.plot(pcg_signal, label="Raw PCG Signal")
-plt.title("Raw PCG Signal")
-plt.xlabel("Samples")
-plt.ylabel("Amplitude")
-plt.legend()
-plt.grid(color='gray', linestyle='--', linewidth=0.5, alpha=0.7)
-plt.show()
+    # --- Przefiltrowany sygnał PCG ---
+    plt.figure(figsize=(12, 4))
+    plt.plot(filtered_pcg, label="Filtered PCG Signal")
+    plt.title("Filtered PCG Signal")
+    plt.xlabel("Samples")
+    plt.ylabel("Amplitude")
+    plt.grid(color='gray', linestyle='--', linewidth=0.5, alpha=0.7)
+    plt.legend()
+    plt.show()
 
-# Filtracja sygnału PCG
-filtered_pcg = pcg_processor.filter_pcg_signal(pcg_signal)
+    # Analiza falkowa EKG
+    transformed_ecg = ecg_processor.wavelet_transform(filtered_ecg)
+    r_peaks = ecg_processor.detect_r_peaks(transformed_ecg)
 
-plt.figure(figsize=(12, 4))
-plt.plot(filtered_pcg, label="Filtered PCG Signal")
-plt.title("Filtered PCG Signal")
-plt.xlabel("Samples")
-plt.ylabel("Amplitude")
-plt.legend()
-plt.grid(color='gray', linestyle='--', linewidth=0.5, alpha=0.7)
-plt.show()
+    # --- Sygnał EKG po analizie falkowej ---
+    plt.figure(figsize=(12, 6))
+    plt.plot(transformed_ecg, label="Wavelet Transformed ECG Signal")
+    plt.plot(r_peaks, transformed_ecg[r_peaks], "rx", label="Detected R Peaks")
+    plt.title("Wavelet Transformed ECG Signal with Detected R Peaks")
+    plt.xlabel("Samples")
+    plt.ylabel("Amplitude")
+    plt.grid(color='gray', linestyle='--', linewidth=0.5, alpha=0.7)
+    plt.legend()
+    plt.show()
 
-# Transformacja falkowa EKG
-transformed_ecg = ecg_processor.wavelet_transform(filtered_ecg)
+    # Analiza Hilberta dla PCG
+    envelope_pcg = pcg_processor.hilbert_envelope(filtered_pcg)
+    s1_s2_peaks = pcg_processor.detect_pcg_peaks(envelope_pcg)
 
-plt.figure(figsize=(12, 4))
-plt.plot(transformed_ecg, label="Wavelet Transformed ECG Signal")
-plt.title("Wavelet Transformed ECG Signal")
-plt.xlabel("Samples")
-plt.ylabel("Amplitude")
-plt.legend()
-plt.grid(color='gray', linestyle='--', linewidth=0.5, alpha=0.7)
-plt.show()
+    # --- Sygnał PCG po transformacji Hilberta ---
+    plt.figure(figsize=(12, 6))
+    plt.plot(filtered_pcg, label="Filtered PCG Signal")
+    plt.plot(envelope_pcg, label="Hilbert Envelope", alpha=0.8)
+    plt.plot(s1_s2_peaks, envelope_pcg[s1_s2_peaks], "rx", label="Detected Peaks (S1/S2)")
+    plt.title("PCG Signal with Hilbert Envelope and Detected Peaks")
+    plt.xlabel("Samples")
+    plt.ylabel("Amplitude")
+    plt.grid(color='gray', linestyle='--', linewidth=0.5, alpha=0.7)
+    plt.legend()
+    plt.show()
 
-# Detekcja pików R
-r_peaks = ecg_processor.detect_r_peaks(transformed_ecg, min_distance=int(fs_ecg * 0.6))
+    # Fuzja danych
+    fusion_engine = FusionEngine(
+        ecg_results={'r_peaks': r_peaks, 'transformed_signal': transformed_ecg},
+        pcg_results={'s1_s2_peaks': s1_s2_peaks}
+    )
 
-# Obliczanie odstępów R-R
-rr_intervals = ecg_processor.calculate_rr_intervals(r_peaks)
+    # Agregacja wyników PCG i EKG
+    fusion_results = fusion_engine.aggregate_results()
 
-plt.figure(figsize=(12, 6))
-plt.plot(transformed_ecg, label="Wavelet Transformed ECG Signal")
-plt.plot(r_peaks, transformed_ecg[r_peaks], "rx", label="Detected R Peaks")
-plt.title("Wavelet Transformed ECG Signal with Detected R Peaks")
-plt.xlabel("Samples")
-plt.ylabel("Amplitude")
-plt.legend()
-plt.grid(color='gray', linestyle='--', linewidth=0.5, alpha=0.7)
-plt.show()
+    # --- Wykres EKG z informacjami z PCG ---
+    plt.figure(figsize=(12, 6))
+    plt.plot(transformed_ecg, label="Wavelet Transformed ECG Signal")
+    plt.plot(r_peaks, transformed_ecg[r_peaks], "rx", label="Detected R Peaks")
+    for peak in fusion_results['enhanced_r_peaks']:
+        plt.axvline(peak, color='g', linestyle='--', alpha=0.7,
+                    label="PCG-Enhanced R Peak" if peak == fusion_results['enhanced_r_peaks'][0] else "")
+    plt.title("Enhanced ECG Signal with PCG Peaks Overlay")
+    plt.xlabel("Samples")
+    plt.ylabel("Amplitude")
+    plt.grid(color='gray', linestyle='--', linewidth=0.5, alpha=0.7)
+    plt.legend()
+    plt.show()
 
-print(f"Detected R Peaks (samples): {r_peaks}")
-print(f"R-R Intervals (ms): {rr_intervals}")
+    # Raport końcowy
+    report = fusion_engine.generate_report()
+    print(report)
 
-# Detekcja tonów S1/S2 w synchronizacji z EKG
-s1_s2_peaks = pcg_processor.detect_s1_s2_peaks(
-    signal=filtered_pcg,
-    ecg_r_peaks=r_peaks,
-    fs_pcg=fs_pcg
-)
 
-# Wyświetlenie wyników detekcji na sygnale PCG
-plt.figure(figsize=(12, 6))
-plt.plot(filtered_pcg, label="Filtered PCG Signal")
-plt.plot(s1_s2_peaks, filtered_pcg[s1_s2_peaks], "rx", label="Detected S1/S2 Peaks")
-plt.title("Filtered PCG Signal with Detected S1/S2 Peaks")
-plt.xlabel("Samples")
-plt.ylabel("Amplitude")
-plt.legend()
-plt.grid(color='gray', linestyle='--', linewidth=0.5, alpha=0.7)
-plt.show()
-
-print(f"Detected S1/S2 Peaks (samples): {s1_s2_peaks}")
-
-# Inicjalizacja FusionEngine
-fusion_engine = FusionEngine(
-    ecg_signal=filtered_ecg,
-    pcg_signal=filtered_pcg,
-    fs_ecg=fs_ecg,
-    fs_pcg=fs_pcg
-)
-
-# Wizualizacja fuzji sygnałów
-fusion_engine.visualize_fusion()
+if __name__ == "__main__":
+    main()
