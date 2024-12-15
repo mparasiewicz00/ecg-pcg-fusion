@@ -4,9 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ad022377-348c-4c2b-996f-2f3db42b64b0" name="Changes" comment="add s1 + s2 detection fix">
+    <list default="true" id="ad022377-348c-4c2b-996f-2f3db42b64b0" name="Changes" comment="add ecg + pcg plot">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/signal_processor.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/signal_processor.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -100,7 +101,7 @@
       <workItem from="1733071438295" duration="21481000" />
       <workItem from="1733476471485" duration="32257000" />
       <workItem from="1733692903892" duration="7614000" />
-      <workItem from="1734093414580" duration="20105000" />
+      <workItem from="1734093414580" duration="27498000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <option name="closed" value="true" />
@@ -182,7 +183,15 @@
       <option name="project" value="LOCAL" />
       <updated>1734270436812</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="add ecg + pcg plot">
+      <option name="closed" value="true" />
+      <created>1734273632356</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1734273632356</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -198,12 +207,13 @@
     <MESSAGE value="add hilbert + change in pcg processing" />
     <MESSAGE value="add s1 + s2 detection" />
     <MESSAGE value="add s1 + s2 detection fix" />
-    <option name="LAST_COMMIT_MESSAGE" value="add s1 + s2 detection fix" />
+    <MESSAGE value="add ecg + pcg plot" />
+    <option name="LAST_COMMIT_MESSAGE" value="add ecg + pcg plot" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/ecg_pcg_fusion$main.coverage" NAME="main Coverage Results" MODIFIED="1734271638245" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
+    <SUITE FILE_PATH="coverage/ecg_pcg_fusion$main.coverage" NAME="main Coverage Results" MODIFIED="1734282489037" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
     <SUITE FILE_PATH="coverage/ecg_pcg_fusion$data_loader.coverage" NAME="data_loader Coverage Results" MODIFIED="1733075185904" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
-    <SUITE FILE_PATH="coverage/ecg_pcg_fusion$signal_processor.coverage" NAME="signal_processor Coverage Results" MODIFIED="1734271386146" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
+    <SUITE FILE_PATH="coverage/ecg_pcg_fusion$signal_processor.coverage" NAME="signal_processor Coverage Results" MODIFIED="1734280748549" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
     <SUITE FILE_PATH="coverage/ecg_pcg_fusion$fusion_engine.coverage" NAME="fusion_engine Coverage Results" MODIFIED="1733501917086" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
   </component>
 </project>

@@ -13,7 +13,6 @@ def main():
 
     # Liczba próbek do analizy
     num_samples = 10000
-
     # Wczytanie danych
     loader = DataLoader(hea_path, dat_path, wav_path)
 
@@ -66,7 +65,8 @@ def main():
 
     # Analiza Hilberta dla PCG
     envelope_pcg = pcg_processor.hilbert_envelope(filtered_pcg)
-    s1_peaks, s2_peaks, s1_s2_intervals = pcg_processor.detect_s1_s2(envelope_pcg)
+    s1_peaks, s2_peaks, s1_s2_intervals = pcg_processor.detect_s1_s2(envelope_pcg, r_peaks=r_peaks)
+
 
     # --- Wykres z wynikami detekcji ---
     plt.figure(figsize=(12, 6))

@@ -71,47 +71,73 @@ class SignalProcessor:
         envelope = np.abs(analytic_signal)
         return envelope
 
-    def detect_s1_s2(self, signal):
+    def detect_s1_s2(self, signal, r_peaks=None):
         """
-        Detekcja tonów S1 i S2 oraz obliczenie odstępów między nimi.
+        Detekcja tonów S1 i S2 z dopasowaniem do pików R z sygnału EKG.
 
         Args:
-            signal (numpy.ndarray): Obwiednia sygnału PCG (wygładzona).
+            signal (numpy.ndarray): Obwiednia sygnału PCG.
+            r_peaks (list or None): Lista pików R z sygnału EKG.
 
         Returns:
             tuple: Listy detekcji (S1, S2) oraz lista odstępów między S1 i S2 (w ms).
         """
-        # Normalizacja sygnału
+        # Normalizacja i wygładzenie sygnału
         signal = signal / np.max(np.abs(signal))
+        smoothed_signal = self.smooth_signal(signal, sigma=1)
 
-        # Wygładzenie sygnału Hilberta
-        smoothed_signal = self.smooth_signal(signal, sigma=3)
-
-        # Wyznaczenie dynamicznego progu detekcji
-        dynamic_threshold = 0.05 + 0.1 * np.std(smoothed_signal)
-
-        # Detekcja lokalnych maksimów
-        peaks, _ = find_peaks(smoothed_signal, height=dynamic_threshold, distance=150)
-
-        # Grupowanie pików w pary S1-S2
         s1_peaks = []
         s2_peaks = []
         intervals = []
 
-        for i in range(len(peaks) - 1):
-            current_peak = peaks[i]
-            next_peak = peaks[i + 1]
-            interval = (next_peak - current_peak) / self.sampling_rate * 1000  # odstęp w ms
+        # Dopasowanie do pików R (jeśli istnieją)
+        if r_peaks is not None and len(r_peaks) > 0:
+            for r_peak in r_peaks:
+                # Szukanie S1: 50 próbek przed R i 100 próbek po R
+                s1_window_start = max(0, r_peak - 50)
+                s1_window_end = r_peak + 100
+                s1_window = smoothed_signal[s1_window_start:s1_window_end]
 
-            if 50 <= interval <= 200:  # Zmieniony zakres dla S1-S2
-                s1_peaks.append(current_peak)
-                s2_peaks.append(next_peak)
-                intervals.append(interval)
+                if len(s1_window) > 0:
+                    s1_local_peak = np.argmax(s1_window) + s1_window_start
+                    s1_peaks.append(s1_local_peak)
 
-        # Debugowanie
-        print(f"Debug: Detected Peaks: {peaks}")
-        print(f"Debug: S1 Peaks: {s1_peaks}")
-        print(f"Debug: S2 Peaks: {s2_peaks}")
-        print(f"Debug: Intervals: {intervals} ms")
+                    # Szukanie S2: 100-400 próbek po S1
+                    s2_window_start = s1_local_peak + 100
+                    s2_window_end = s1_local_peak + 400
+                    s2_window = smoothed_signal[s2_window_start:s2_window_end]
+
+                    if len(s2_window) > 0:
+                        s2_local_peak = np.argmax(s2_window) + s2_window_start
+                        s2_peaks.append(s2_local_peak)
+
+                        # Obliczenie odstępu między S1 a S2
+                        interval = (s2_local_peak - s1_local_peak) / self.sampling_rate * 1000
+                        intervals.append(interval)
+
+        # Fallback: Klasyczna detekcja w przypadku braku R-peaks
+        else:
+            dynamic_threshold = 0.05 + 0.05 * np.max(smoothed_signal)
+            peaks, _ = find_peaks(smoothed_signal, height=dynamic_threshold, distance=150)
+
+            for i in range(len(peaks) - 1):
+                current_peak = peaks[i]
+                next_peak = peaks[i + 1]
+                interval = (next_peak - current_peak) / self.sampling_rate * 1000
+
+                if 50 <= interval <= 200:
+                    s1_peaks.append(current_peak)
+                    s2_peaks.append(next_peak)
+                    intervals.append(interval)
+
+        print(f"Debug: Detected S1 Peaks: {s1_peaks}")
+        print(f"Debug: Detected S2 Peaks: {s2_peaks}")
+        print(f"Debug: Intervals (ms): {intervals}")
 
         return s1_peaks, s2_peaks, intervals
+
+
+
+
+
+
