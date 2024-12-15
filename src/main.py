@@ -12,7 +12,7 @@ def main():
     wav_path = "../data/a0011.wav"
 
     # Liczba próbek do analizy
-    num_samples = 5000
+    num_samples = 10000
 
     # Wczytanie danych
     loader = DataLoader(hea_path, dat_path, wav_path)

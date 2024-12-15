@@ -85,10 +85,13 @@ class SignalProcessor:
         signal = signal / np.max(np.abs(signal))
 
         # Wygładzenie sygnału Hilberta
-        smoothed_signal = self.smooth_signal(signal, sigma=5)
+        smoothed_signal = self.smooth_signal(signal, sigma=3)
+
+        # Wyznaczenie dynamicznego progu detekcji
+        dynamic_threshold = 0.05 + 0.1 * np.std(smoothed_signal)
 
         # Detekcja lokalnych maksimów
-        peaks, _ = find_peaks(smoothed_signal, height=0.1, distance=150)
+        peaks, _ = find_peaks(smoothed_signal, height=dynamic_threshold, distance=150)
 
         # Grupowanie pików w pary S1-S2
         s1_peaks = []
@@ -100,7 +103,7 @@ class SignalProcessor:
             next_peak = peaks[i + 1]
             interval = (next_peak - current_peak) / self.sampling_rate * 1000  # odstęp w ms
 
-            if 50 <= interval <= 200:
+            if 50 <= interval <= 200:  # Zmieniony zakres dla S1-S2
                 s1_peaks.append(current_peak)
                 s2_peaks.append(next_peak)
                 intervals.append(interval)
