@@ -102,39 +102,30 @@ class SignalProcessor:
                     s1_local_peak = np.argmax(s1_window) + s1_window_start
                     s1_peaks.append(s1_local_peak)
 
-                    # Szukanie S2: 100-400 próbek po S1
-                    s2_window_start = s1_local_peak + 100
-                    s2_window_end = s1_local_peak + 400
+                    # Szukanie S2: 150-700 próbek po S1
+                    s2_window_start = s1_local_peak + 150
+                    s2_window_end = s1_local_peak + 700
                     s2_window = smoothed_signal[s2_window_start:s2_window_end]
 
                     if len(s2_window) > 0:
                         s2_local_peak = np.argmax(s2_window) + s2_window_start
-                        s2_peaks.append(s2_local_peak)
 
-                        # Obliczenie odstępu między S1 a S2
-                        interval = (s2_local_peak - s1_local_peak) / self.sampling_rate * 1000
-                        intervals.append(interval)
+                        # Sprawdzenie minimalnego odstępu czasowego między S1 a S2
+                        if (s2_local_peak - s1_local_peak) >= 200:
+                            s2_peaks.append(s2_local_peak)
+                            interval = (s2_local_peak - s1_local_peak) / self.sampling_rate * 1000
+                            intervals.append(interval)
 
-        # Fallback: Klasyczna detekcja w przypadku braku R-peaks
-        else:
-            dynamic_threshold = 0.05 + 0.05 * np.max(smoothed_signal)
-            peaks, _ = find_peaks(smoothed_signal, height=dynamic_threshold, distance=150)
-
-            for i in range(len(peaks) - 1):
-                current_peak = peaks[i]
-                next_peak = peaks[i + 1]
-                interval = (next_peak - current_peak) / self.sampling_rate * 1000
-
-                if 50 <= interval <= 200:
-                    s1_peaks.append(current_peak)
-                    s2_peaks.append(next_peak)
-                    intervals.append(interval)
+            # Usunięcie duplikatów lub fałszywych detekcji S2
+            s2_peaks = [peak for peak in s2_peaks if not any(abs(peak - s) < 50 for s in s1_peaks)]
 
         print(f"Debug: Detected S1 Peaks: {s1_peaks}")
         print(f"Debug: Detected S2 Peaks: {s2_peaks}")
         print(f"Debug: Intervals (ms): {intervals}")
 
         return s1_peaks, s2_peaks, intervals
+
+
 
 
 
