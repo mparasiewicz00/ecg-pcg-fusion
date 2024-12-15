@@ -2,6 +2,7 @@ import numpy as np
 import pywt
 from scipy.ndimage import gaussian_filter
 from scipy.signal import butter, sosfilt, find_peaks, hilbert
+from scipy.signal import argrelextrema
 
 class SignalProcessor:
     """
@@ -16,9 +17,9 @@ class SignalProcessor:
     GAUSSIAN_SIGMA_ECG = 30  # Parametr sigma dla wygładzania EKG
     GAUSSIAN_SIGMA_PCG = 5  # Parametr sigma dla wygładzania PCG
     R_PEAK_THRESHOLD_FACTOR = 2.0  # Współczynnik progu dla wykrywania pików R
-    S1_S2_THRESHOLD_FACTOR = 2.5 # Współczynnik progu dla wykrywania tonów S1/S2
+    S1_S2_THRESHOLD_FACTOR = 2.5  # Współczynnik progu dla wykrywania tonów S1/S2
     MIN_DISTANCE_R_PEAKS = 800  # Minimalna odległość między pikami R (w próbkach)
-    MIN_DISTANCE_S1_S2 = 800  # Minimalna odległość między tonami S1/S2 (w próbkach)
+    MIN_DISTANCE_S1_S2 = 200  # Minimalna odległość między tonami S1/S2 (w próbkach)
 
     def __init__(self, sampling_rate):
         self.sampling_rate = sampling_rate
@@ -62,17 +63,6 @@ class SignalProcessor:
         peaks, _ = find_peaks(signal, height=dynamic_threshold, distance=self.MIN_DISTANCE_R_PEAKS)
         return peaks
 
-    def detect_pcg_peaks(self, signal):
-        """
-        Detekcja tonów S1/S2 w sygnale PCG na podstawie dynamicznego progu.
-        """
-        mean_signal = np.mean(signal)
-        std_signal = np.std(signal)
-        dynamic_threshold = mean_signal + self.S1_S2_THRESHOLD_FACTOR * std_signal
-
-        peaks, _ = find_peaks(signal, height=dynamic_threshold, distance=self.MIN_DISTANCE_S1_S2)
-        return peaks
-
     def hilbert_envelope(self, signal):
         """
         Obwiednia sygnału PCG wyznaczona za pomocą transformacji Hilberta.
@@ -80,3 +70,45 @@ class SignalProcessor:
         analytic_signal = hilbert(signal)
         envelope = np.abs(analytic_signal)
         return envelope
+
+    def detect_s1_s2(self, signal):
+        """
+        Detekcja tonów S1 i S2 oraz obliczenie odstępów między nimi.
+
+        Args:
+            signal (numpy.ndarray): Obwiednia sygnału PCG (wygładzona).
+
+        Returns:
+            tuple: Listy detekcji (S1, S2) oraz lista odstępów między S1 i S2 (w ms).
+        """
+        # Normalizacja sygnału
+        signal = signal / np.max(np.abs(signal))
+
+        # Wygładzenie sygnału Hilberta
+        smoothed_signal = self.smooth_signal(signal, sigma=5)
+
+        # Detekcja lokalnych maksimów
+        peaks, _ = find_peaks(smoothed_signal, height=0.1, distance=150)
+
+        # Grupowanie pików w pary S1-S2
+        s1_peaks = []
+        s2_peaks = []
+        intervals = []
+
+        for i in range(len(peaks) - 1):
+            current_peak = peaks[i]
+            next_peak = peaks[i + 1]
+            interval = (next_peak - current_peak) / self.sampling_rate * 1000  # odstęp w ms
+
+            if 50 <= interval <= 200:
+                s1_peaks.append(current_peak)
+                s2_peaks.append(next_peak)
+                intervals.append(interval)
+
+        # Debugowanie
+        print(f"Debug: Detected Peaks: {peaks}")
+        print(f"Debug: S1 Peaks: {s1_peaks}")
+        print(f"Debug: S2 Peaks: {s2_peaks}")
+        print(f"Debug: Intervals: {intervals} ms")
+
+        return s1_peaks, s2_peaks, intervals

@@ -1,4 +1,6 @@
 import matplotlib.pyplot as plt
+import numpy as np
+
 from data_loader import DataLoader
 from signal_processor import SignalProcessor
 from fusion_engine import FusionEngine
@@ -64,24 +66,28 @@ def main():
 
     # Analiza Hilberta dla PCG
     envelope_pcg = pcg_processor.hilbert_envelope(filtered_pcg)
-    s1_s2_peaks = pcg_processor.detect_pcg_peaks(envelope_pcg)
+    s1_peaks, s2_peaks, s1_s2_intervals = pcg_processor.detect_s1_s2(envelope_pcg)
 
-    # --- Sygnał PCG po transformacji Hilberta ---
+    # --- Wykres z wynikami detekcji ---
     plt.figure(figsize=(12, 6))
     plt.plot(filtered_pcg, label="Filtered PCG Signal")
     plt.plot(envelope_pcg, label="Hilbert Envelope", alpha=0.8)
-    plt.plot(s1_s2_peaks, envelope_pcg[s1_s2_peaks], "rx", label="Detected Peaks (S1/S2)")
-    plt.title("PCG Signal with Hilbert Envelope and Detected Peaks")
+    plt.plot(s1_peaks, envelope_pcg[s1_peaks], "rx", label="S1 Peaks")
+    plt.plot(s2_peaks, envelope_pcg[s2_peaks], "gx", label="S2 Peaks")
+    plt.title("PCG Signal with Hilbert Envelope and Detected S1/S2 Peaks")
     plt.xlabel("Samples")
     plt.ylabel("Amplitude")
-    plt.grid(color='gray', linestyle='--', linewidth=0.5, alpha=0.7)
     plt.legend()
     plt.show()
+
+    print(f"Detected S1 Peaks: {len(s1_peaks)}")
+    print(f"Detected S2 Peaks: {len(s2_peaks)}")
+    print(f"Average S1-S2 Interval (ms): {np.mean(s1_s2_intervals) if s1_s2_intervals else 'N/A'}")
 
     # Fuzja danych
     fusion_engine = FusionEngine(
         ecg_results={'r_peaks': r_peaks, 'transformed_signal': transformed_ecg},
-        pcg_results={'s1_s2_peaks': s1_s2_peaks}
+        pcg_results={'s1_s2_peaks': s1_peaks + s2_peaks, 's1_peaks': s1_peaks, 's2_peaks': s2_peaks}
     )
 
     # Agregacja wyników PCG i EKG
@@ -104,7 +110,6 @@ def main():
     # Raport końcowy
     report = fusion_engine.generate_report()
     print(report)
-
 
 if __name__ == "__main__":
     main()

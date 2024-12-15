@@ -21,16 +21,14 @@ class FusionEngine:
         ecg_peaks = self.ecg_results['r_peaks']
         pcg_peaks = self.pcg_results['s1_s2_peaks']
 
-        # Dodanie pików PCG jako wsparcia do EKG
         enhanced_peaks = set(ecg_peaks)
         for peak in pcg_peaks:
-            # Wyszukiwanie pików z PCG blisko pików z EKG
             if not any(abs(peak - ecg_peak) < 50 for ecg_peak in ecg_peaks):
                 enhanced_peaks.add(peak)
 
         return {
             'r_peaks': ecg_peaks,
-            'enhanced_r_peaks': sorted(enhanced_peaks)  # Sortowanie wyników
+            'enhanced_r_peaks': sorted(enhanced_peaks)
         }
 
     def compare_results(self):
@@ -50,10 +48,10 @@ class FusionEngine:
         """
         Generowanie raportu końcowego.
         """
-        results = self.compare_results()
+        comparison = self.compare_results()
         report = f"""
-        EKG Cycles: {results['ecg_cycles']}
-        PCG Cycles: {results['pcg_cycles']}
-        Difference: {results['difference']}
+        EKG Cycles: {comparison['ecg_cycles']}
+        PCG Cycles: {comparison['pcg_cycles']}
+        Difference: {comparison['difference']}
         """
         return report

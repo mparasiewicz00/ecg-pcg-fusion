@@ -4,9 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ad022377-348c-4c2b-996f-2f3db42b64b0" name="Changes" comment="adding grid to plots">
+    <list default="true" id="ad022377-348c-4c2b-996f-2f3db42b64b0" name="Changes" comment="add hilbert + change in pcg processing">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/data_loader.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/data_loader.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/fusion_engine.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/fusion_engine.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/signal_processor.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/signal_processor.py" afterDir="false" />
@@ -103,7 +102,7 @@
       <workItem from="1733071438295" duration="21481000" />
       <workItem from="1733476471485" duration="32257000" />
       <workItem from="1733692903892" duration="7614000" />
-      <workItem from="1734093414580" duration="9091000" />
+      <workItem from="1734093414580" duration="15449000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <option name="closed" value="true" />
@@ -161,7 +160,15 @@
       <option name="project" value="LOCAL" />
       <updated>1733493864472</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="add hilbert + change in pcg processing">
+      <option name="closed" value="true" />
+      <created>1734132694460</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1734132694460</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -174,10 +181,11 @@
     <MESSAGE value="pcg filtering fix" />
     <MESSAGE value="add poc fusion_engine.py and charts, improvements in pcg filtering" />
     <MESSAGE value="adding grid to plots" />
-    <option name="LAST_COMMIT_MESSAGE" value="adding grid to plots" />
+    <MESSAGE value="add hilbert + change in pcg processing" />
+    <option name="LAST_COMMIT_MESSAGE" value="add hilbert + change in pcg processing" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/ecg_pcg_fusion$main.coverage" NAME="main Coverage Results" MODIFIED="1734132444556" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
+    <SUITE FILE_PATH="coverage/ecg_pcg_fusion$main.coverage" NAME="main Coverage Results" MODIFIED="1734266195195" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
     <SUITE FILE_PATH="coverage/ecg_pcg_fusion$data_loader.coverage" NAME="data_loader Coverage Results" MODIFIED="1733075185904" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
     <SUITE FILE_PATH="coverage/ecg_pcg_fusion$signal_processor.coverage" NAME="signal_processor Coverage Results" MODIFIED="1733700298568" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
     <SUITE FILE_PATH="coverage/ecg_pcg_fusion$fusion_engine.coverage" NAME="fusion_engine Coverage Results" MODIFIED="1733501917086" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
