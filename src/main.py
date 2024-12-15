@@ -107,6 +107,30 @@ def main():
     plt.legend()
     plt.show()
 
+    # --- Wykres EKG i PCG razem ---
+    fig, ax = plt.subplots(2, 1, figsize=(12, 8), sharex=True)
+
+    # Sygnał EKG
+    ax[0].plot(filtered_ecg, color='green', label="Filtered ECG Signal")
+    ax[0].set_title("Filtered ECG Signal")
+    ax[0].set_ylabel("Amplitude")
+    ax[0].grid(color='gray', linestyle='--', linewidth=0.5, alpha=0.7)
+    ax[0].legend()
+
+    # Sygnał PCG
+    ax[1].plot(filtered_pcg, color='gray', label="Filtered PCG Signal")
+    ax[1].plot(envelope_pcg, color='orange', alpha=0.8, label="Hilbert Envelope")
+    ax[1].plot(s1_peaks, envelope_pcg[s1_peaks], "rx", label="S1 Peaks")
+    ax[1].plot(s2_peaks, envelope_pcg[s2_peaks], "gx", label="S2 Peaks")
+    ax[1].set_title("Filtered PCG Signal with Hilbert Envelope and Detected Peaks")
+    ax[1].set_xlabel("Samples")
+    ax[1].set_ylabel("Amplitude")
+    ax[1].grid(color='gray', linestyle='--', linewidth=0.5, alpha=0.7)
+    ax[1].legend()
+
+    plt.tight_layout()
+    plt.show()
+
     # Raport końcowy
     report = fusion_engine.generate_report()
     print(report)
