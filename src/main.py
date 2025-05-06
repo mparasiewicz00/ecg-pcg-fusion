@@ -4,6 +4,7 @@ import numpy as np
 from data_loader import DataLoader
 from signal_processor import SignalProcessor
 from fusion_engine import FusionEngine
+from scipy.signal import resample
 
 def main():
     # Ścieżki do plików
@@ -12,13 +13,18 @@ def main():
     wav_path = "../data/a0011.wav"
 
     # Liczba próbek do analizy
-    num_samples = 10000
+    num_samples = 50000
     # Wczytanie danych
     loader = DataLoader(hea_path, dat_path, wav_path)
 
     # Wczytywanie sygnałów
     ecg_signal, fs_ecg = loader.load_ecg_signal(sample_rate=num_samples)
     pcg_signal, fs_pcg = loader.load_pcg_signal(sample_rate=num_samples)
+
+    if fs_pcg != fs_ecg:
+        num_samples_pcg = int(len(pcg_signal) * fs_ecg / fs_pcg)
+        pcg_signal = resample(pcg_signal, num_samples_pcg)
+        fs_pcg = fs_ecg
 
     # Przetwarzanie sygnałów
     ecg_processor = SignalProcessor(fs_ecg)
@@ -65,7 +71,7 @@ def main():
 
     # Analiza Hilberta dla PCG
     envelope_pcg = pcg_processor.hilbert_envelope(filtered_pcg)
-    s1_peaks, s2_peaks, s1_s2_intervals = pcg_processor.detect_s1_s2(envelope_pcg, r_peaks=r_peaks)
+    s1_peaks, s2_peaks, s1_s2_intervals = pcg_processor.detect_s1_s2(envelope_pcg)
 
 
     # --- Wykres z wynikami detekcji ---
@@ -77,6 +83,7 @@ def main():
     plt.title("PCG Signal with Hilbert Envelope and Detected S1/S2 Peaks")
     plt.xlabel("Samples")
     plt.ylabel("Amplitude")
+    plt.grid(color='gray', linestyle='--', linewidth=0.5, alpha=0.7)
     plt.legend()
     plt.show()
 
@@ -87,21 +94,48 @@ def main():
     # Fuzja danych
     fusion_engine = FusionEngine(
         ecg_results={'r_peaks': r_peaks, 'transformed_signal': transformed_ecg},
-        pcg_results={'s1_s2_peaks': s1_peaks + s2_peaks, 's1_peaks': s1_peaks, 's2_peaks': s2_peaks}
+        pcg_results={
+            's1_s2_peaks': list(s1_peaks) + list(s2_peaks),
+            's1_peaks': s1_peaks,
+            's2_peaks': s2_peaks,
+            'sampling_rate': fs_pcg
+        }
     )
 
-    # Agregacja wyników PCG i EKG
-    fusion_results = fusion_engine.aggregate_results()
+    diagnostic_params = FusionEngine.calculate_fusion_parameters(
+        r_peaks=r_peaks,
+        s1_peaks=s1_peaks,
+        s2_peaks=s2_peaks,
+        fs_ecg=fs_ecg,
+        fs_pcg=fs_pcg
+    )
+    print("\n--- Diagnostic Parameters ---")
+    for param, value in diagnostic_params.items():
+        if value is None:
+            print(f"{param}: N/A")
+        else:
+            suffix = " %" if param == "CVRR (%)" else ""
+            print(f"{param}: {value:.2f}{suffix}")
 
-    # --- Wykres EKG z informacjami z PCG ---
+
+    time_axis = np.arange(len(transformed_ecg)) / fs_ecg * 1000
+
     plt.figure(figsize=(12, 6))
-    plt.plot(transformed_ecg, label="Wavelet Transformed ECG Signal")
-    plt.plot(r_peaks, transformed_ecg[r_peaks], "rx", label="Detected R Peaks")
-    for peak in fusion_results['enhanced_r_peaks']:
-        plt.axvline(peak, color='g', linestyle='--', alpha=0.7,
-                    label="PCG-Enhanced R Peak" if peak == fusion_results['enhanced_r_peaks'][0] else "")
+    plt.plot(time_axis, transformed_ecg, label="Wavelet Transformed ECG Signal")
+    plt.plot(time_axis[r_peaks], transformed_ecg[r_peaks], "rx", label="Detected R Peaks")
+
+    # Linie S1
+    for s1 in s1_peaks:
+        plt.axvline(time_axis[s1], color='blue', linestyle='--', alpha=0.5,
+                    label="Detected S1 (PCG)" if s1 == s1_peaks[0] else "")
+
+    # Linie R
+    for peak in r_peaks:
+        plt.axvline(time_axis[peak], color='r', linestyle='-', alpha=0.5,
+                    label="Detected R Peak" if peak == r_peaks[0] else "")
+
     plt.title("Enhanced ECG Signal with PCG Peaks Overlay")
-    plt.xlabel("Samples")
+    plt.xlabel("Time [ms]")
     plt.ylabel("Amplitude")
     plt.grid(color='gray', linestyle='--', linewidth=0.5, alpha=0.7)
     plt.legend()

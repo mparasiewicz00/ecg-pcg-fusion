@@ -4,6 +4,14 @@ from scipy.ndimage import gaussian_filter
 from scipy.signal import butter, sosfilt, find_peaks, hilbert
 from scipy.signal import argrelextrema
 
+
+def smooth_signal(signal, sigma):
+    """
+    Wygładzanie sygnału za pomocą filtru Gaussa.
+    """
+    return gaussian_filter(signal, sigma=sigma)
+
+
 class SignalProcessor:
     """
     Klasa do przetwarzania sygnałów EKG i PCG z zaawansowaną filtracją i detekcją pików.
@@ -35,12 +43,6 @@ class SignalProcessor:
         filtered_signal = sosfilt(sos, signal)
         return filtered_signal
 
-    def smooth_signal(self, signal, sigma):
-        """
-        Wygładzanie sygnału za pomocą filtru Gaussa.
-        """
-        return gaussian_filter(signal, sigma=sigma)
-
     def wavelet_transform(self, signal):
         """
         Transformacja falkowa z uwypukleniem cech charakterystycznych sygnału.
@@ -71,57 +73,41 @@ class SignalProcessor:
         envelope = np.abs(analytic_signal)
         return envelope
 
-    def detect_s1_s2(self, signal, r_peaks=None):
-        """
-        Detekcja tonów S1 i S2 z dopasowaniem do pików R z sygnału EKG.
+    def detect_s1_s2(self, signal):
+        signal = signal / np.max(np.abs(signal))  # Normalizacja
+        smoothed_signal = smooth_signal(signal, sigma=1)
 
-        Args:
-            signal (numpy.ndarray): Obwiednia sygnału PCG.
-            r_peaks (list or None): Lista pików R z sygnału EKG.
-
-        Returns:
-            tuple: Listy detekcji (S1, S2) oraz lista odstępów między S1 i S2 (w ms).
-        """
-        # Normalizacja i wygładzenie sygnału
-        signal = signal / np.max(np.abs(signal))
-        smoothed_signal = self.smooth_signal(signal, sigma=1)
+        # Wstępna detekcja peaków
+        threshold = 0.18 * np.max(smoothed_signal)
+        candidate_peaks, _ = find_peaks(
+            smoothed_signal,
+            height=threshold,
+            distance=int(0.2 * self.sampling_rate)  # minimum 200ms odstępu
+        )
 
         s1_peaks = []
         s2_peaks = []
-        intervals = []
 
-        # Dopasowanie do pików R (jeśli istnieją)
-        if r_peaks is not None and len(r_peaks) > 0:
-            for r_peak in r_peaks:
-                # Szukanie S1: 50 próbek przed R i 100 próbek po R
-                s1_window_start = max(0, r_peak - 50)
-                s1_window_end = r_peak + 100
-                s1_window = smoothed_signal[s1_window_start:s1_window_end]
+        i = 0
+        while i < len(candidate_peaks):
+            s1 = candidate_peaks[i]
+            s1_peaks.append(s1)
 
-                if len(s1_window) > 0:
-                    s1_local_peak = np.argmax(s1_window) + s1_window_start
-                    s1_peaks.append(s1_local_peak)
 
-                    # Szukanie S2: 150-700 próbek po S1
-                    s2_window_start = s1_local_peak + 150
-                    s2_window_end = s1_local_peak + 700
-                    s2_window = smoothed_signal[s2_window_start:s2_window_end]
+            s2_window_start = s1 + int(0.1 * self.sampling_rate)  # 100 ms
+            s2_window_end = s1 + int(0.5 * self.sampling_rate)  # 500 ms
 
-                    if len(s2_window) > 0:
-                        s2_local_peak = np.argmax(s2_window) + s2_window_start
+            s2_candidates = [p for p in candidate_peaks if s2_window_start <= p <= s2_window_end]
 
-                        # Sprawdzenie minimalnego odstępu czasowego między S1 a S2
-                        if (s2_local_peak - s1_local_peak) >= 200:
-                            s2_peaks.append(s2_local_peak)
-                            interval = (s2_local_peak - s1_local_peak) / self.sampling_rate * 1000
-                            intervals.append(interval)
+            if s2_candidates:
 
-            # Usunięcie duplikatów lub fałszywych detekcji S2
-            s2_peaks = [peak for peak in s2_peaks if not any(abs(peak - s) < 50 for s in s1_peaks)]
+                s2 = max(s2_candidates, key=lambda idx: smoothed_signal[idx])
+                s2_peaks.append(s2)
+                i = np.where(candidate_peaks == s2)[0][0] + 1
+            else:
+                i += 1
 
-        print(f"Debug: Detected S1 Peaks: {s1_peaks}")
-        print(f"Debug: Detected S2 Peaks: {s2_peaks}")
-        print(f"Debug: Intervals (ms): {intervals}")
+        intervals = [(s2 - s1) / self.sampling_rate * 1000 for s1, s2 in zip(s1_peaks, s2_peaks)]
 
         return s1_peaks, s2_peaks, intervals
 
