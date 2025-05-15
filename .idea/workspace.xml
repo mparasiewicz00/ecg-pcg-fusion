@@ -4,18 +4,29 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ad022377-348c-4c2b-996f-2f3db42b64b0" name="Changes" comment="improved p1/p2 detecting">
-      <change afterPath="$PROJECT_DIR$/data/a0064.dat" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/a0064.hea" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/a0064.wav" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/a0380.dat" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/a0380.hea" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/a0380.wav" afterDir="false" />
+    <list default="true" id="ad022377-348c-4c2b-996f-2f3db42b64b0" name="Changes" comment="improvements">
+      <change afterPath="$PROJECT_DIR$/data/ECGPCG0009.dat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/ECGPCG0009.hea" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/ECGPCG0010.dat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/ECGPCG0013.dat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/ECGPCG0013.hea" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/data_loader.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/data_loader.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/fusion_engine.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/fusion_engine.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/a0001.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/a0001.hea" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/a0001.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/a0002.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/a0002.hea" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/a0002.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/a0009.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/a0009.hea" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/a0009.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/a0011.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/a0011.hea" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/a0011.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data_loader.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/fusion_engine.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/signal_processor.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/signal_processor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/signal_processor.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,29 +74,89 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.data_loader.executor&quot;: &quot;Run&quot;,
-    &quot;Python.fusion_engine.executor&quot;: &quot;Run&quot;,
-    &quot;Python.main.executor&quot;: &quot;Run&quot;,
-    &quot;Python.signal_processor.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/mateuszparasiewicz/PycharmProjects/ecg-pcg-fusion/data&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.IDE.editor.colors.Color Scheme Font&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.data_loader.executor": "Run",
+    "Python.fusion_engine.executor": "Run",
+    "Python.main.executor": "Run",
+    "Python.main_new.executor": "Run",
+    "Python.signal_processor.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "/Users/mateuszparasiewicz/Documents/Praca dyplomowa/wykresy",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "editor.preferences.fonts.default",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$USER_HOME$/Documents/Praca dyplomowa/wykresy" />
       <recent name="$PROJECT_DIR$/data" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src" />
+      <recent name="$PROJECT_DIR$/src/new" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.main">
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="ecg-pcg-fusion" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="main_new" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="ecg-pcg-fusion" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/new" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/main_new.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.main" />
+        <item itemvalue="Python.main_new" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -117,7 +188,7 @@
       <workItem from="1745441660199" duration="219000" />
       <workItem from="1745441910061" duration="37000" />
       <workItem from="1745441962165" duration="3056000" />
-      <workItem from="1745771406249" duration="25761000" />
+      <workItem from="1745771406249" duration="134392000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <option name="closed" value="true" />
@@ -223,7 +294,15 @@
       <option name="project" value="LOCAL" />
       <updated>1734287342983</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="improvements">
+      <option name="closed" value="true" />
+      <created>1746561534084</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1746561534084</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -241,12 +320,14 @@
     <MESSAGE value="add s1 + s2 detection fix" />
     <MESSAGE value="add ecg + pcg plot" />
     <MESSAGE value="improved p1/p2 detecting" />
-    <option name="LAST_COMMIT_MESSAGE" value="improved p1/p2 detecting" />
+    <MESSAGE value="improvements" />
+    <option name="LAST_COMMIT_MESSAGE" value="improvements" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/ecg_pcg_fusion$signal_processor.coverage" NAME="signal_processor Coverage Results" MODIFIED="1746480793613" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
     <SUITE FILE_PATH="coverage/ecg_pcg_fusion$data_loader.coverage" NAME="data_loader Coverage Results" MODIFIED="1733075185904" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
-    <SUITE FILE_PATH="coverage/ecg_pcg_fusion$main.coverage" NAME="main Coverage Results" MODIFIED="1746560813710" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
+    <SUITE FILE_PATH="coverage/ecg_pcg_fusion$main_new.coverage" NAME="main_new Coverage Results" MODIFIED="1746815463087" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/new" />
+    <SUITE FILE_PATH="coverage/ecg_pcg_fusion$main.coverage" NAME="main Coverage Results" MODIFIED="1747344843269" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
     <SUITE FILE_PATH="coverage/ecg_pcg_fusion$fusion_engine.coverage" NAME="fusion_engine Coverage Results" MODIFIED="1746559904569" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
   </component>
 </project>
