@@ -4,29 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ad022377-348c-4c2b-996f-2f3db42b64b0" name="Changes" comment="improvements">
+    <list default="true" id="ad022377-348c-4c2b-996f-2f3db42b64b0" name="Changes" comment="Reimplementation with a new signal scheme">
       <change afterPath="$PROJECT_DIR$/data/ECGPCG0009.dat" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/data/ECGPCG0009.hea" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/data/ECGPCG0010.dat" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/data/ECGPCG0013.dat" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/data/ECGPCG0013.hea" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/a0001.dat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/a0001.hea" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/a0001.wav" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/a0002.dat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/a0002.hea" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/a0002.wav" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/a0009.dat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/a0009.hea" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/a0009.wav" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/a0011.dat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/a0011.hea" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/a0011.wav" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/data_loader.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/fusion_engine.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/signal_processor.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -188,7 +173,7 @@
       <workItem from="1745441660199" duration="219000" />
       <workItem from="1745441910061" duration="37000" />
       <workItem from="1745441962165" duration="3056000" />
-      <workItem from="1745771406249" duration="134392000" />
+      <workItem from="1745771406249" duration="162248000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <option name="closed" value="true" />
@@ -302,7 +287,15 @@
       <option name="project" value="LOCAL" />
       <updated>1746561534084</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Reimplementation with a new signal scheme">
+      <option name="closed" value="true" />
+      <created>1747345023253</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1747345023253</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -321,13 +314,14 @@
     <MESSAGE value="add ecg + pcg plot" />
     <MESSAGE value="improved p1/p2 detecting" />
     <MESSAGE value="improvements" />
-    <option name="LAST_COMMIT_MESSAGE" value="improvements" />
+    <MESSAGE value="Reimplementation with a new signal scheme" />
+    <option name="LAST_COMMIT_MESSAGE" value="Reimplementation with a new signal scheme" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/ecg_pcg_fusion$signal_processor.coverage" NAME="signal_processor Coverage Results" MODIFIED="1746480793613" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
     <SUITE FILE_PATH="coverage/ecg_pcg_fusion$data_loader.coverage" NAME="data_loader Coverage Results" MODIFIED="1733075185904" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
     <SUITE FILE_PATH="coverage/ecg_pcg_fusion$main_new.coverage" NAME="main_new Coverage Results" MODIFIED="1746815463087" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/new" />
-    <SUITE FILE_PATH="coverage/ecg_pcg_fusion$main.coverage" NAME="main Coverage Results" MODIFIED="1747344843269" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
+    <SUITE FILE_PATH="coverage/ecg_pcg_fusion$main.coverage" NAME="main Coverage Results" MODIFIED="1747691309149" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
     <SUITE FILE_PATH="coverage/ecg_pcg_fusion$fusion_engine.coverage" NAME="fusion_engine Coverage Results" MODIFIED="1746559904569" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
   </component>
 </project>
