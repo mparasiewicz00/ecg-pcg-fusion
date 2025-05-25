@@ -20,25 +20,24 @@ def preprocess_signals(record, ecg_chan=0, pcg_chan=1):
     ecg_raw = raw[:, ecg_chan]
     pcg_raw = raw[:, pcg_chan]
 
-    # --- ECG z filtrami FIR ---
-    # 1) FIR-notch 50 Hz, szer. tłumienia ~2 Hz
-    taps_notch = firwin(401, [49, 51], pass_zero=True, fs=fs)
-    ecg_nn = filtfilt(taps_notch, [1.0], ecg_raw)
-    # 2) FIR-bandpass 0.5–40 Hz
-    taps_bp = firwin(801, [0.5, 40], pass_zero=False, fs=fs)
-    ecg_bp = filtfilt(taps_bp, [1.0], ecg_nn)
+    # --- ECG FIR-notch + FIR-bandpass ---
+    # 1) FIR-notch @50 Hz, BW ~2 Hz (401 taps)
+    taps_ecg_notch = firwin(401, [49, 51], pass_zero=True, fs=fs)
+    ecg_nn = filtfilt(taps_ecg_notch, [1.0], ecg_raw)
+    # 2) FIR-bandpass 0.5–40 Hz (801 taps)
+    taps_ecg_bp = firwin(801, [0.5, 40], pass_zero=False, fs=fs)
+    ecg_bp = filtfilt(taps_ecg_bp, [1.0], ecg_nn)
 
-    # --- PCG z filtrami IIR ---
-    # IIR-notch 50 Hz (Q=30)
-    bN, aN = iirnotch(50/(fs/2), Q=30)
-    sosN = sig.tf2sos(bN, aN)
-    pcg_nn = sosfiltfilt(sosN, pcg_raw)
-    # IIR-bandpass 10–100 Hz, 4. rzędu
-    sosP = butter(4, [10/(fs/2), 100/(fs/2)], btype='band', output='sos')
-    pcg_bp = sosfiltfilt(sosP, pcg_nn)
+    # --- PCG FIR-notch + FIR-bandpass ---
+    # 1) FIR-notch @50 Hz, BW ~2 Hz (401 taps)
+    taps_pcg_notch = firwin(401, [49, 51], pass_zero=True, fs=fs)
+    pcg_nn = filtfilt(taps_pcg_notch, [1.0], pcg_raw)
+    # 2) FIR-bandpass 10–100 Hz (801 taps)
+    taps_pcg_bp = firwin(801, [10, 100], pass_zero=False, fs=fs)
+    pcg_bp = filtfilt(taps_pcg_bp, [1.0], pcg_nn)
 
-    print(f"ECG filtrowane: {ecg_bp.min():.3f}…{ecg_bp.max():.3f} mV")
-    print(f"PCG filtrowane: {pcg_bp.min():.3f}…{pcg_bp.max():.3f} mV")
+    print(f"ECG filtrowane (FIR): {ecg_bp.min():.3f}…{ecg_bp.max():.3f} mV")
+    print(f"PCG filtrowane (FIR): {pcg_bp.min():.3f}…{pcg_bp.max():.3f} mV")
 
     return ecg_bp, pcg_bp
 
@@ -116,7 +115,7 @@ def plot_pcg_raw(record, t_max: float = 30.0):
     plt.tight_layout()
     plt.show()
 
-def plot_ecg_filtered(ecg_bp, fs, t_max: float = 3.0):
+def plot_ecg_filtered(ecg_bp, fs, t_max: float = 30):
     n = int(min(t_max * fs, ecg_bp.size))
     t = np.arange(n) / fs
 
@@ -156,7 +155,7 @@ if __name__ == '__main__':
     plot_pcg_filtered(pcg_bp, rec.fs)
 
     fs = rec.fs
-    t_max = 2.5
+    t_max = 30.0
     n_max = int(t_max * fs)
     t = np.arange(n_max) / fs
     ecg_seg = ecg_bp[:n_max]
@@ -172,7 +171,7 @@ if __name__ == '__main__':
     print(f"Znaleziono {len(r_peaks)} R-peaks (wavelet)")
 
     # ECG po transformacji falkowej i detekcja R-peaks
-    plt.figure(figsize=(12, 4))
+    plt.figure(figsize=(12, 6))
     plt.plot(t, feat[:n_max], label='Wavelet feature')
     plt.plot(r_peaks / fs, feat[r_peaks], 'ro', label='R-peaks')
     plt.xlabel('Czas [s]')
@@ -191,7 +190,7 @@ if __name__ == '__main__':
     print(f"S1_env: {len(S1)}, S2_env: {len(S2)}")
 
     # wykres detekcji
-    plt.figure(figsize=(12,4))
+    plt.figure(figsize=(12,6))
     plt.plot(t, ecg_seg, label='ECG filtrowane')
     if r_peaks.size>0:
         plt.plot(r_peaks/fs, ecg_seg[r_peaks], 'ro', label='R-peaks')
@@ -204,7 +203,7 @@ if __name__ == '__main__':
 
     # Detekcja S1/S2 z obwiedni
     t = np.arange(len(env)) / fs
-    plt.figure(figsize=(12, 4))
+    plt.figure(figsize=(12, 6))
     plt.plot(t, env, label='PCG envelope')
     plt.plot(S1 / fs, env[S1], 'gx', label='S1_env')
     plt.plot(S2 / fs, env[S2], 'kx', label='S2_env')
@@ -214,7 +213,7 @@ if __name__ == '__main__':
     plt.grid()
     plt.show()
 
-    fig, ax = plt.subplots(figsize=(12, 4))
+    fig, ax = plt.subplots(figsize=(12, 6))
 
     # ECG filtrowane + R-peaki
     ax.plot(t, ecg_seg[:n_max], label='ECG filtrowane')
