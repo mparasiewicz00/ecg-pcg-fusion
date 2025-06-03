@@ -3,7 +3,6 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 import pywt
-import scipy.signal as sig
 import wfdb
 from scipy.signal import hilbert, find_peaks, firwin, filtfilt, iirnotch, sosfiltfilt, butter
 
@@ -236,8 +235,7 @@ if __name__ == '__main__':
     plt.show()
 
 
-    # czasy i wartości parametrów:
-    # __________________________________
+    # ------------- czasy i wartości parametrów: -------------------
 
     # HR/RR
     t_R = r_peaks[1:] / fs
